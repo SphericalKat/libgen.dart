@@ -1,0 +1,11 @@
+name: libgen
+description: Dart wrapper for the Library Genesis API
+version: 0.0.1
+homepage: https://github.com/hobroker/libgen.dart
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dev_dependencies:
+  test: ^1.15.3
+  pedantic: ^1.9.0
