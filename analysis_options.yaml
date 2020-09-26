@@ -1,1 +1,6 @@
 include: package:pedantic/analysis_options.yaml
+
+linter:
+  rules:
+    - prefer_relative_imports
+    - type_annotate_public_apis

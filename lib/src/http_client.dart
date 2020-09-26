@@ -19,7 +19,7 @@ class HttpClient extends http.BaseClient {
       _isHttps ? Uri.https(host, path, query) : Uri.http(host, path, query);
 
   Future<T> request<T>(
-    path, {
+    String path, {
     Map<String, String> query,
     Map<String, String> headers,
   }) async {

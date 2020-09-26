@@ -1,6 +1,6 @@
-import 'package:libgen/src/mirror.dart';
-import 'package:libgen/src/mirror_finder.dart';
-import 'package:libgen/src/mirrors.dart';
+import 'mirror.dart';
+import 'mirror_finder.dart';
+import 'mirrors.dart';
 
 class Libgen {
   LibgenMirror mirror;

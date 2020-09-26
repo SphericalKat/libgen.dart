@@ -1,4 +1,4 @@
-import 'package:libgen/src/mirror_schema.dart';
+import 'mirror_schema.dart';
 
 final libgenMirrorSchemas = [
   LibgenMirrorSchema(

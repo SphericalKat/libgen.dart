@@ -1,4 +1,4 @@
-int minNonNullIndex(list) {
+int minNonNullIndex(List list) {
   if (list.length == 1) {
     return 0;
   }

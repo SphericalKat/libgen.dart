@@ -1,5 +1,5 @@
-import 'package:libgen/src/http_client.dart';
-import 'package:libgen/src/mirror_schema.dart';
+import 'http_client.dart';
+import 'mirror_schema.dart';
 
 class LibgenMirror {
   final bool canDownload;
