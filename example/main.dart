@@ -4,6 +4,6 @@ void main() async {
   final libgen = Libgen();
   await libgen.setFastestMirror();
 
-  final result = await libgen.mirror.getByIds([1]);
+  final result = await libgen.getByIds([1]);
   print(result);
 }

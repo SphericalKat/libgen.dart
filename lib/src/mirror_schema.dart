@@ -1,15 +1,13 @@
 import 'package:meta/meta.dart';
 
-class LibgenMirrorSchema {
+class MirrorSchema {
   final bool canDownload;
   final String scheme;
   final String host;
 
-  LibgenMirrorSchema({
-    this.scheme = 'http',
+  const MirrorSchema({
     @required this.host,
+    this.scheme = 'http',
     this.canDownload = false,
-  }) {
-    assert(host != null);
-  }
+  });
 }

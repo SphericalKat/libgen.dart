@@ -11,7 +11,7 @@ class LibgenMirror {
     HttpClient client,
   }) : _http = client;
 
-  LibgenMirror.fromSchema(LibgenMirrorSchema schema)
+  LibgenMirror.fromSchema(MirrorSchema schema)
       : canDownload = schema.canDownload,
         _http = HttpClient(
           host: schema.host,
@@ -19,10 +19,10 @@ class LibgenMirror {
         );
 
   /// Retuns a [List] of [Map] with [fields] by [ids]
-  Future<List> getByIds(List<int> ids, [String fields = '*']) =>
+  Future<List> getByIds(List<int> ids, [String fields]) =>
       _http.request('json.php', query: {
         'ids': ids.join(','),
-        'fields': fields,
+        'fields': fields ?? '*',
       });
 
   /// Returns `"pong"` if the mirror returned any data
