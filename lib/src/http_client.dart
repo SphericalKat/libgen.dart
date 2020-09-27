@@ -8,10 +8,8 @@ class HttpClient extends http.BaseClient {
   final String scheme;
   final String host;
 
-  HttpClient({this.scheme, this.host, http.Client client})
-      : _httpClient = client ?? http.Client() {
-    assert(scheme != 'http' || scheme != 'htpps');
-  }
+  HttpClient({this.scheme = 'http', this.host, http.Client client})
+      : _httpClient = client ?? http.Client();
 
   bool get _isHttps => scheme == 'https';
 

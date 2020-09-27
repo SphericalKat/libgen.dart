@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 int minNonNullIndex(List list) {
   if (list.length == 1) {
     return 0;
@@ -13,3 +15,5 @@ int minNonNullIndex(List list) {
 
   return minIdx;
 }
+
+String beautify(Map json) => JsonEncoder.withIndent('  ').convert(json);
