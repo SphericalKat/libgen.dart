@@ -29,7 +29,7 @@ void main() {
       expect(request is http.StreamedResponse, equals(true));
     });
 
-    group('request', () {
+    group('.request', () {
       test('returns the expected response', () async {
         final response = {'id': '1'};
         final client = mockedClient(response);
@@ -38,7 +38,7 @@ void main() {
         expect(result, equals(response));
       });
 
-      test('returns the expected response', () async {
+      test('returns the expected response on error', () async {
         final response = {};
         final client = mockedClient(response, 500);
         final result = await client.request('one').catchError((error) {

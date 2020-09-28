@@ -11,11 +11,11 @@ class Book {
   final String year;
   final String edition;
   final String publisher;
-  final String descr;
+  final String description;
   final String identifier;
   final String ext;
 
-  Book({
+  const Book({
     @required this.id,
     @required this.md5,
     this.title,
@@ -23,7 +23,7 @@ class Book {
     this.year,
     this.edition,
     this.publisher,
-    this.descr,
+    this.description,
     this.identifier,
     this.ext,
   })  : assert(id != null, 'id is required'),
@@ -37,7 +37,7 @@ class Book {
         year = json['year'],
         edition = json['edition'],
         publisher = json['publisher'],
-        descr = json['descr'],
+        description = json['descr'],
         identifier = json['identifier'],
         ext = json['extension'];
 
@@ -49,9 +49,9 @@ class Book {
         'year': year,
         'edition': edition,
         'publisher': publisher,
-        'descr': descr,
         'identifier': identifier,
         'extension': ext,
+        'descr': description,
       };
 
   @override
@@ -66,7 +66,7 @@ class Book {
           year == other.year &&
           edition == other.edition &&
           publisher == other.publisher &&
-          descr == other.descr &&
+          description == other.description &&
           identifier == other.identifier &&
           ext == other.ext;
 

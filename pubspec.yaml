@@ -7,5 +7,6 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dev_dependencies:
+  mockito: ^3.0.2
   pedantic: ^1.9.0
   test: ^1.15.3

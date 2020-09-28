@@ -1,4 +1,4 @@
 library libgen;
 
 export 'src/libgen.dart' show Libgen;
-export 'src/mirror.dart' show LibgenMirror;
+export 'src/mirror_schema.dart' show MirrorSchema;

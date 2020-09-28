@@ -1,13 +1,21 @@
 import 'package:meta/meta.dart';
 
+@immutable
 class MirrorSchema {
-  final bool canDownload;
-  final String scheme;
-  final String host;
+  final Uri baseUri;
+  final MirrorOptions options;
 
   const MirrorSchema({
-    @required this.host,
-    this.scheme = 'http',
+    @required this.baseUri,
+    this.options = const MirrorOptions(),
+  });
+}
+
+@immutable
+class MirrorOptions {
+  final bool canDownload;
+
+  const MirrorOptions({
     this.canDownload = false,
   });
 }

@@ -1,9 +1,8 @@
 import 'package:libgen/libgen.dart';
 
 void main() async {
-  final libgen = Libgen();
-  await libgen.setFastestMirror();
+  final libgen = await Libgen.any();
 
-  final result = await libgen.getByIds([1]);
+  final result = await libgen.getById('1591104');
   print(result);
 }
