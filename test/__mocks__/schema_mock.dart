@@ -5,5 +5,5 @@ final workingSchemaSample = MirrorSchema(
 );
 
 final brokenSchemaSample = MirrorSchema(
-  baseUri: Uri.http('libgen.is', ''),
+  baseUri: Uri.http('a.b.co', ''),
 );

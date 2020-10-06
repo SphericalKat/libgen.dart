@@ -8,7 +8,7 @@ analyze: ## Perform static analysis over lib/ test/
 	dartanalyzer lib test
 
 test: ## Run tests
-	pub run test --reporter=expanded
+	pub run test
 
 test.coverage: ## Run tests with coverage
 	pub run test --coverage=coverage

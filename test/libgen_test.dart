@@ -1,89 +1,107 @@
-import 'dart:convert';
-
-import 'package:http/http.dart';
-import 'package:http/testing.dart';
-import 'package:libgen/src/http_client.dart';
 import 'package:libgen/src/libgen.dart';
+import 'package:libgen/src/mirror_finder.dart';
 import 'package:libgen/src/mirror_schema.dart';
-import 'package:libgen/src/mirror_schema_finder.dart';
 import 'package:test/test.dart';
 
 import '__mocks__/book_mock.dart';
 import '__mocks__/schema_mock.dart';
+import 'utils.dart';
 
 void main() {
   group('Libgen', () {
-    final mockedClient = (response, [statusCode = 200]) => HttpClient(
-          client: MockClient(
-              (request) async => Response(json.encode(response), statusCode)),
-        );
-
-    final mockedLibgenMirror =
-        ({bool withResults = false, bool canDownload = false}) => Libgen(
-              client: mockedClient(withResults ? singleJsonList : []),
-              options: MirrorOptions(canDownload: canDownload),
-            );
-
     group('.fromSchema()', () {
-      test('creates a new LibgenMirror from LibgenMirrorSchema', () async {
+      test('creates a new [Libgen] from [MirrorSchema]', () async {
         final mirror = Libgen.fromSchema(workingSchemaSample);
 
-        expect(mirror is Libgen, equals(true));
+        expect(mirror is Libgen, isTrue);
       });
     });
 
     group('.finder', () {
-      test('returns a `MirrorSchemaFinder` instance', () async {
-        expect(Libgen.finder is MirrorSchemaFinder, equals(true));
+      test('returns a [MirrorFinder] instance', () async {
+        expect(Libgen.finder is MirrorFinder, isTrue);
       });
     });
 
     group('.fastest', () {
-      test('returns a `Libgen` instance', () async {
-        expect(await Libgen.fastest() is Libgen, equals(true));
+      test('returns a [Libgen] instance', () async {
+        expect(await Libgen.fastest() is Libgen, isTrue);
       });
     });
 
     group('.any', () {
-      test('returns a `Libgen` instance', () async {
-        expect(await Libgen.any() is Libgen, equals(true));
+      test('returns a [Libgen] instance', () async {
+        expect(await Libgen.any() is Libgen, isTrue);
       });
     });
 
     group('.getById()', () {
-      test('returns the expected Book', () async {
-        final response = singleJsonList;
-        final mirror = Libgen(
-          client: mockedClient(response),
-        );
-        final result = await mirror.getById('1591104');
+      test('returns the expected [Book]', () async {
+        final mirror = Libgen(client: defaultMockedClient());
+        final result = await mirror.getById(1591104);
 
-        expect(result, equals(darkMatterBook.object));
+        expect(result, darkMatterBook.object);
       });
 
       test('returns null on no results', () async {
-        final mirror = mockedLibgenMirror(withResults: false);
-        final result = await mirror.getById('999999');
+        final mirror = Libgen(client: defaultMockedClient());
+        final result = await mirror.getById(-1);
 
-        expect(result, equals(null));
+        expect(result, isNull);
+      });
+    });
+
+    group('.getByIds()', () {
+      test('returns the expected [List] of [Book]', () async {
+        final mirror = Libgen(client: defaultMockedClient());
+        final expected = {
+          1: firstBook.object,
+          1591104: darkMatterBook.object,
+        };
+        final result = await mirror.getByIds(List<int>.from(expected.keys));
+
+        expect(result, expected.values);
+      });
+
+      test('returns empty array on no results', () async {
+        final mirror = Libgen(client: defaultMockedClient());
+        final result = await mirror.getByIds([-1]);
+
+        expect(result, []);
       });
     });
 
     group('.ping()', () {
       test('returns pong on success', () async {
-        final mirror = mockedLibgenMirror(withResults: false);
+        final mirror = Libgen(client: defaultMockedClient());
         final result = await mirror.ping();
 
-        expect(result, equals('pong'));
+        expect(result, 'pong');
       });
     });
 
     group('.canDownload', () {
+      test('returns false when [options] are missing', () async {
+        final mirror = Libgen(client: defaultMockedClient());
+
+        expect(mirror.canDownload, isFalse);
+      });
+
       test('returns the expected value', () async {
-        expect(mockedLibgenMirror().canDownload, equals(false));
         expect(
-            mockedLibgenMirror(canDownload: false).canDownload, equals(false));
-        expect(mockedLibgenMirror(canDownload: true).canDownload, equals(true));
+          Libgen(
+            client: defaultMockedClient(),
+            options: MirrorOptions(canDownload: false),
+          ).canDownload,
+          isFalse,
+        );
+        expect(
+          Libgen(
+            client: defaultMockedClient(),
+            options: MirrorOptions(canDownload: true),
+          ).canDownload,
+          isTrue,
+        );
       });
     });
   });

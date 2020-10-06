@@ -4,7 +4,7 @@ import '../util.dart';
 
 @immutable
 class Book {
-  final String id;
+  final int id;
   final String md5;
   final String title;
   final String author;
@@ -13,6 +13,7 @@ class Book {
   final String publisher;
   final String description;
   final String identifier;
+  final String language;
   final String ext;
 
   const Book({
@@ -25,12 +26,13 @@ class Book {
     this.publisher,
     this.description,
     this.identifier,
+    this.language,
     this.ext,
   })  : assert(id != null, 'id is required'),
         assert(md5 != null, 'md5 is required');
 
   Book.fromJson(Map json)
-      : id = json['id'],
+      : id = int.parse(json['id']),
         md5 = json['md5'],
         title = json['title'],
         author = json['author'],
@@ -39,10 +41,11 @@ class Book {
         publisher = json['publisher'],
         description = json['descr'],
         identifier = json['identifier'],
+        language = json['language'],
         ext = json['extension'];
 
   Map<String, String> toJson() => {
-        'id': id,
+        'id': id.toString(),
         'md5': md5,
         'title': title,
         'author': author,
@@ -51,6 +54,7 @@ class Book {
         'publisher': publisher,
         'identifier': identifier,
         'extension': ext,
+        'language': language,
         'descr': description,
       };
 
@@ -68,6 +72,7 @@ class Book {
           publisher == other.publisher &&
           description == other.description &&
           identifier == other.identifier &&
+          language == other.language &&
           ext == other.ext;
 
   @override

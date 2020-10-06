@@ -10,8 +10,8 @@ void main() {
     });
 
     test('returns null', () async {
-      expect(minNonNullIndex([]), equals(null));
-      expect(minNonNullIndex([null, null]), equals(null));
+      expect(minNonNullIndex([]), isNull);
+      expect(minNonNullIndex([null, null]), isNull);
     });
   });
 
@@ -24,9 +24,22 @@ void main() {
   "title": "zxc"
 }'''));
     });
+
+    test('returns [null] on null input', () {
+      expect(beautify(null), equals('null'));
+    });
   });
 
-  test('returns null on null input', () {
-    expect(beautify(null), equals('null'));
+  group('getResultsCount', () {
+    test('returns the expected int', () {
+      expect(getResultsCount(10), equals(25));
+      expect(getResultsCount(5), equals(25));
+      expect(getResultsCount(25), equals(25));
+      expect(getResultsCount(30), equals(50));
+      expect(getResultsCount(50), equals(50));
+      expect(getResultsCount(70), equals(100));
+      expect(getResultsCount(100), equals(100));
+      expect(getResultsCount(120), equals(100));
+    });
   });
 }
