@@ -10,7 +10,7 @@ analyze: ## Perform static analysis over lib/ test/
 test: ## Run tests
 	pub run test
 
-test.coverage: ## Run tests with coverage
+coverage: ## Run tests with coverage
 	pub run test --coverage=coverage
 	pub global activate coverage
 	pub global run coverage:format_coverage \

@@ -25,10 +25,6 @@ class HttpClient extends BaseClient {
   }) async {
     final body = await requestRaw(path, query: query, headers: headers);
 
-    if (body == null || body.isEmpty) {
-      return null;
-    }
-
     return json.decode(body);
   }
 
