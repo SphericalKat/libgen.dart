@@ -46,6 +46,7 @@ void main() {
           'extension',
           'language',
           'descr',
+          'filesize',
         ]);
       });
     });

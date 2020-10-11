@@ -1,4 +1,4 @@
-import 'package:libgen/src/pagination/pagination.dart';
+import 'package:libgen/src/search/pagination.dart';
 import 'package:test/test.dart';
 
 void main() {

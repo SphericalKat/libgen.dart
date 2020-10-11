@@ -1,11 +1,9 @@
-import '../util.dart';
-
-class PageData {
+class PageOptions {
   /// The page size for Ligen API
-  final int limit;
+  final String limit;
 
   /// The page number for Libgen API
-  final int page;
+  final String page;
 
   /// The number of items the client should ignore at the end of the [List]
   final int ignoreLast;
@@ -16,36 +14,23 @@ class PageData {
   /// True if there are more pages to fetch
   final bool hasNext;
 
-  PageData({
-    this.limit,
-    this.page,
+  PageOptions({
+    int page,
+    int limit,
     this.ignoreLast,
     this.ignoreFirst,
     this.hasNext,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'limit': limit,
-        'page': page,
-        'ignoreLast': ignoreLast,
-        'ignoreFirst': ignoreFirst,
-        'hasNext': hasNext,
-      };
+  })  : page = page.toString(),
+        limit = limit.toString();
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PageData &&
+      other is PageOptions &&
           runtimeType == other.runtimeType &&
           limit == other.limit &&
           page == other.page &&
           ignoreLast == other.ignoreLast &&
           ignoreFirst == other.ignoreFirst &&
           hasNext == other.hasNext;
-
-  @override
-  int get hashCode => super.hashCode;
-
-  @override
-  String toString() => '$runtimeType ${beautify(toJson())}';
 }

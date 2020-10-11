@@ -9,7 +9,7 @@ void printList(List<Book> list) => list.forEach((item) => print(beautify(pick(
     ))));
 
 void main() async {
-  final libgen = await Libgen.any();
+  final libgen = Libgen();
 
   // print(await libgen.getById(1591104));
   // print(await libgen.getById(1));
@@ -17,11 +17,9 @@ void main() async {
   // print(await libgen.getLatestId());
   // print(await libgen.getLatestMd5());
   // print(await libgen.getLatest());
-  print('here');
   printList(await libgen.search(
     text: 'dark matter',
-    count: 10,
+    count: 2,
     searchIn: SearchColumn.title,
   ));
-  print('here2');
 }

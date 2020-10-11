@@ -92,19 +92,22 @@ int _computeLimit(int count, [bool lower = false]) {
   if (count > _pageSizes.last) {
     return _pageSizes.last;
   }
+  var result;
 
-  for (var idx = 0; idx < _pageSizes.length - 1; idx++) {
+  for (var idx = 0; idx < _pageSizes.length; idx++) {
     final item = _pageSizes[idx];
     final div = count / item;
 
     if (div <= 1) {
       if (lower && idx > 0 && div != 1) {
-        return _pageSizes[idx - 1];
+        result = idx - 1;
+      } else {
+        result = idx;
       }
 
-      return item;
+      break;
     }
   }
 
-  return _pageSizes.last;
+  return _pageSizes[result];
 }

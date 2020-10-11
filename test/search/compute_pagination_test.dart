@@ -1,5 +1,5 @@
-import 'package:libgen/src/pagination/compute_pagination.dart';
-import 'package:libgen/src/pagination/pagination_options.dart';
+import 'package:libgen/src/search/compute_pagination.dart';
+import 'package:libgen/src/search/page_options.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -9,7 +9,7 @@ void main() {
         final nav = computePagination(25);
 
         expect(nav, [
-          PageData(
+          PageOptions(
             limit: 25,
             page: 1,
             ignoreFirst: 0,
@@ -23,7 +23,7 @@ void main() {
         final nav = computePagination(30, offset: 5);
 
         expect(nav, [
-          PageData(
+          PageOptions(
             limit: 50,
             page: 1,
             ignoreFirst: 5,
@@ -39,14 +39,14 @@ void main() {
         final nav = computePagination(120);
 
         expect(nav, [
-          PageData(
+          PageOptions(
             limit: 100,
             page: 1,
             ignoreFirst: 0,
             ignoreLast: 0,
             hasNext: true,
           ),
-          PageData(
+          PageOptions(
             limit: 25,
             page: 2,
             ignoreFirst: 0,
@@ -59,18 +59,18 @@ void main() {
         final nav = computePagination(120, offset: 70);
 
         expect(nav, [
-          PageData(
+          PageOptions(
             limit: 100,
             page: 2,
-            ignoreLast: 0,
             ignoreFirst: 20,
+            ignoreLast: 0,
             hasNext: true,
           ),
-          PageData(
+          PageOptions(
             limit: 50,
             page: 3,
-            ignoreLast: 10,
             ignoreFirst: 0,
+            ignoreLast: 10,
             hasNext: false,
           ),
         ]);

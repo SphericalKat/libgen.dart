@@ -1,28 +1,30 @@
 import 'package:meta/meta.dart';
 
-import 'constants.dart';
 import 'http_client.dart';
+import 'libgen_api.dart';
 import 'list_extension.dart';
 import 'mirror_finder.dart';
 import 'mirror_schema.dart';
 import 'mirrors.dart';
 import 'models/book.dart';
 import 'models/search.dart';
-import 'parser.dart';
+import 'search/libgen_search.dart';
 import 'util.dart';
 
 @immutable
 class Libgen extends _AbstactLibgen {
-  final HttpClient _client;
+  final LibgenApi _api;
 
-  const Libgen({
-    @required HttpClient client,
+  Libgen({
+    HttpClient client,
     MirrorOptions options = const MirrorOptions(),
-  })  : _client = client,
+  })  : _api = LibgenApi(
+          client: client ?? HttpClient(baseUri: mirrorSchemas.first.baseUri),
+        ),
         super(options: options);
 
   Libgen.fromSchema(MirrorSchema schema)
-      : _client = HttpClient(baseUri: schema.baseUri),
+      : _api = LibgenApi(client: HttpClient(baseUri: schema.baseUri)),
         super(options: schema.options);
 
   static MirrorFinder get finder => MirrorFinder.fromSchemas(mirrorSchemas);
@@ -35,10 +37,13 @@ class Libgen extends _AbstactLibgen {
   /// with [_client] being [MirrorSchema] with ANY SUCCESSFUL [ping] response
   static Future<Libgen> any() => finder.any();
 
-  /// Returns a [Book] by [id]
-  /// Returns [Null] on no result
+  /// Returns a [Book] by [id] or [Null] on no result
   @override
   Future<Book> getById(int id) async {
+    if (id == null) {
+      return null;
+    }
+
     final results = await getByIds([id]);
     return results.firstOrNull;
   }
@@ -46,10 +51,22 @@ class Libgen extends _AbstactLibgen {
   /// Returns a [List] of [Book] by [ids]
   @override
   Future<List<Book>> getByIds(List<int> ids) async {
-    final results = await _client.request<List>('json.php',
-        query: {'ids': ids.join(','), 'fields': searchFields});
+    final list = <Book>[];
+    final results = await _api.json(ids);
+    final byId = results.fold<Map<int, Book>>({}, (acc, item) {
+      acc[int.parse(item['id'])] = Book.fromJson(item);
 
-    return results.map<Book>((item) => Book.fromJson(item)).toList();
+      return acc;
+    });
+
+    ids.forEach((element) {
+      final item = byId[element];
+      if (item != null) {
+        list.add(item);
+      }
+    });
+
+    return list;
   }
 
   @override
@@ -57,50 +74,32 @@ class Libgen extends _AbstactLibgen {
     @required String text,
     int count = 25,
     int offset = 0,
-    SearchSortBy sortBy,
     SearchColumn searchIn,
-    bool reverse = false,
   }) async {
-    final body = await _client.requestRaw('search.php', query: {
-      'req': text,
-      'view': 'simple',
-      // 'page': 'page',
-      'column': enumValue(searchIn),
-      'sort': enumValue(sortBy),
-      'sortmode': reverse ? 'DESC' : 'ASC',
-      'res': getResultsCount(count).toString(),
-    });
+    final libgenSearch = LibgenSearch(
+      text: text,
+      count: count,
+      offset: offset,
+      searchIn: enumValue(searchIn),
+    );
+    final ids = await libgenSearch.run(_api.search);
 
-    final parser = LibgenPageParser(body);
-
-    return getByIds(parser.ids);
+    return getByIds(ids);
   }
 
   /// Returns the latest [Book.id]
   @override
   Future<int> getLatestId() async {
-    final body =
-        await _client.requestRaw('search.php', query: {'mode': 'last'});
-    final parser = LibgenPageParser(body);
+    final data = await _api.search({'mode': 'last'});
 
-    return parser.firstId;
+    return data.firstId;
   }
 
-  /// Returns the latest [Book.md5]
+  /// Returns the latest [Book]
   @override
-  Future<Book> getLatest() async {
-    final id = await getLatestId();
-
-    if (id == null) {
-      return null;
-    }
-
-    return getById(id);
-  }
+  Future<Book> getLatest() => getLatestId().then(getById);
 
   /// Returns `"pong"` if the request succeeds
-  ///
-  /// Returns [Exception] if the request fails
   @override
   Future<String> ping() async {
     await getById(1);
@@ -126,11 +125,9 @@ abstract class _AbstactLibgen {
 
   Future<List<Book>> search({
     @required String text,
-    int count = 25,
-    int offset = 0,
-    SearchSortBy sortBy,
+    int count,
+    int offset,
     SearchColumn searchIn,
-    bool reverse = false,
   });
 
   Future<Book> getLatest();

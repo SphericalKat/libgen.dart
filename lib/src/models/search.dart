@@ -1,14 +1,3 @@
-enum SearchSortBy {
-  def,
-  title,
-  publisher,
-  year,
-  pages,
-  language,
-  filesize,
-  extension,
-}
-
 enum SearchColumn {
   def,
   title,

@@ -1,14 +1,22 @@
 import 'package:libgen/src/libgen.dart';
 import 'package:libgen/src/mirror_finder.dart';
 import 'package:libgen/src/mirror_schema.dart';
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '__mocks__/book_mock.dart';
+import '__mocks__/pages_mock.dart';
 import '__mocks__/schema_mock.dart';
 import 'utils.dart';
 
 void main() {
   group('Libgen', () {
+    test('default mirror works', () async {
+      final mirror = Libgen();
+
+      expect(await mirror.ping(), 'pong');
+    });
+
     group('.fromSchema()', () {
       test('creates a new [Libgen] from [MirrorSchema]', () async {
         final mirror = Libgen.fromSchema(workingSchemaSample);
@@ -49,6 +57,13 @@ void main() {
 
         expect(result, isNull);
       });
+
+      test('returns null when null is the [id]', () async {
+        final mirror = Libgen(client: defaultMockedClient());
+        final result = await mirror.getById(null);
+
+        expect(result, isNull);
+      });
     });
 
     group('.getByIds()', () {
@@ -63,7 +78,7 @@ void main() {
         expect(result, expected.values);
       });
 
-      test('returns empty array on no results', () async {
+      test('returns empty list on no results', () async {
         final mirror = Libgen(client: defaultMockedClient());
         final result = await mirror.getByIds([-1]);
 
@@ -77,6 +92,32 @@ void main() {
         final result = await mirror.ping();
 
         expect(result, 'pong');
+      });
+    });
+
+    group('.getLatestId()', () {
+      test('returns the expected first id from the list', () async {
+        final client = MockHttpClient();
+        when(client.requestRaw('search.php', query: anyNamed('query')))
+            .thenAnswer((_) async => getHtmlPageWithIds([1, 2]));
+
+        final mirror = Libgen(client: client);
+        final result = await mirror.getLatestId();
+
+        expect(result, 1);
+      });
+    });
+
+    group('.getLatest()', () {
+      test('returns the expected first id from the list', () async {
+        final client = defaultMockedClient();
+        when(client.requestRaw('search.php', query: anyNamed('query')))
+            .thenAnswer((_) async => getHtmlPageWithIds([1]));
+
+        final mirror = Libgen(client: client);
+        final result = await mirror.getLatest();
+
+        expect(result, firstBook.object);
       });
     });
 

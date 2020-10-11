@@ -1,10 +1,10 @@
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
-class LibgenPageParser {
+class PageParser {
   final Document _document;
 
-  LibgenPageParser(String html) : _document = parse(html);
+  PageParser(String html) : _document = parse(html);
 
   List<int> get ids => _rows.map<int>(_extractRowId).toList(growable: false);
 
