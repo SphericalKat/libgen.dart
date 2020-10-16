@@ -18,23 +18,4 @@ int minNonNullIndex(List list) {
 
 String beautify(Map json) => JsonEncoder.withIndent('  ').convert(json);
 
-Map<K, V> pick<K, V>(Map<K, V> json, List<K> keys) =>
-    Map<K, V>.fromEntries(keys.map((key) => MapEntry(key, json[key])));
-
 String enumValue(Object value) => value.toString().split('').last;
-
-int getResultsCount(int count) {
-  final counts = [25, 50, 100];
-
-  if (count > counts.last) {
-    return counts.last;
-  }
-
-  for (final item in counts) {
-    if (count / item <= 1) {
-      return item;
-    }
-  }
-
-  return counts.first;
-}

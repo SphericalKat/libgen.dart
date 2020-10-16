@@ -1,26 +1,43 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:http/http.dart' show Client;
 import 'package:meta/meta.dart';
 
+import '../libgen.dart';
 import 'constants.dart';
 import 'http_client.dart';
 import 'page_parser.dart';
 
 @immutable
-class LibgenApi {
-  final HttpClient _client;
-
+class LibgenApi extends HttpClient {
   LibgenApi({
-    HttpClient client,
-  }) : _client = client;
+    Uri baseUri,
+    Client client,
+  }) : super(baseUri: baseUri, client: client);
+
+  LibgenApi.fromSchema(MirrorSchema schema) : super(baseUri: schema.baseUri);
 
   /// Requests /json.php with [ids] and [searchFields]
-  Future<List> json(List ids) => _client.request<List>('json.php', query: {
-        'ids': ids.join(','),
-        'fields': searchFields,
-      });
+  /// Returns a [List] of [int]
+  Future<List> getByIds(List ids) async {
+    final body = await get('json.php', {
+      'ids': ids.join(','),
+      'fields': searchFields,
+    });
 
-  /// Requests /search.php with [query[
+    if (body == null) {
+      return null;
+    }
+
+    return JsonDecoder().convert(body);
+  }
+
+  /// Requests /search.php with [query] and parses the page
+  /// Returns a [PageParser] instance
   Future<PageParser> search(Map<String, String> query) async {
-    final body = await _client.requestRaw('search.php', query: query);
+    final body = await get('search.php', query);
+
     return PageParser(body);
   }
 }

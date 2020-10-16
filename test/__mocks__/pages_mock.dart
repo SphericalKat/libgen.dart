@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:libgen/src/page_parser.dart';
 
 Future<String> getSearchPage() => http
     .get('http://libgen.rs/search.php?req=something')
@@ -14,3 +15,6 @@ String getHtmlPageWithIds(List<int> ids) => '''
     </body>
   </html>
   ''';
+
+PageParser getParsedHtmlPageWithIds(List<int> ids) =>
+    PageParser(getHtmlPageWithIds(ids));

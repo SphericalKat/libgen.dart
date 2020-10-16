@@ -38,17 +38,47 @@ void main() async {
       ]);
     });
 
-    test('returns the expected list from HTML String', () {
-      final ids = [1, 2, 3];
-      final parser = PageParser(getHtmlPageWithIds(ids));
+    group('.ids', () {
+      test('returns the expected list from HTML String', () {
+        final ids = [1, 2, 3];
+        final parser = PageParser(getHtmlPageWithIds(ids));
 
-      expect(parser.ids, ids);
+        expect(parser.ids, ids);
+      });
+
+      test('returns an empty list when has an invalid HTML', () {
+        final parser = PageParser('invalid');
+
+        expect(parser.ids, []);
+      });
     });
 
-    test('returns the expected .firstId', () {
-      final parser = PageParser(html);
+    group('.firstId', () {
+      test('returns the expected value', () {
+        final parser = PageParser(getHtmlPageWithIds([1]));
 
-      expect(parser.firstId, 62088);
+        expect(parser.firstId, 1);
+      });
+
+      test('returns null when the ids List is empty', () {
+        final parser = PageParser(getHtmlPageWithIds([]));
+
+        expect(parser.firstId, null);
+      });
+
+      test('returns null when [html] is invalid', () {
+        final parser = PageParser('invalid');
+
+        expect(parser.firstId, null);
+      });
+    });
+
+    test('== returns the expected result', () {
+      final ids = [1, 2, 3];
+      final response = getHtmlPageWithIds(ids);
+
+      expect(PageParser(response), PageParser(response));
+      expect(PageParser(response), isNot(PageParser('response')));
     });
   });
 }

@@ -9,21 +9,21 @@ typedef SearchRequest = Future<PageParser> Function(Map<String, String>);
 
 @immutable
 class LibgenSearch {
-  final String text;
+  final String query;
   final int count;
   final int offset;
   final String searchIn;
   final List<PageOptions> _nav;
 
   LibgenSearch({
-    @required this.text,
+    @required this.query,
     this.count,
     this.offset,
     this.searchIn,
   }) : _nav = computePagination(count, offset: offset);
 
   Map<String, String> get defaultParams => {
-        'req': text,
+        'req': query,
         'column': searchIn,
         'view': 'simple',
       };

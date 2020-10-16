@@ -3,6 +3,9 @@ import 'package:libgen/src/models/book.dart';
 import 'package:libgen/src/models/search.dart';
 import 'package:libgen/src/util.dart';
 
+Map<K, V> pick<K, V>(Map<K, V> json, List<K> keys) =>
+    Map<K, V>.fromEntries(keys.map((key) => MapEntry(key, json[key])));
+
 void printList(List<Book> list) => list.forEach((item) => print(beautify(pick(
       item.toJson(),
       ['id', 'title', 'author', 'md5'],
@@ -18,7 +21,7 @@ void main() async {
   // print(await libgen.getLatestMd5());
   // print(await libgen.getLatest());
   printList(await libgen.search(
-    text: 'dark matter',
+    query: 'dark matter',
     count: 2,
     searchIn: SearchColumn.title,
   ));

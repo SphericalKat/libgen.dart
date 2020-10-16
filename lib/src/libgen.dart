@@ -11,6 +11,8 @@ import 'models/search.dart';
 import 'search/libgen_search.dart';
 import 'util.dart';
 
+part 'libgen.abstract.dart';
+
 @immutable
 class Libgen extends _AbstactLibgen {
   final LibgenApi _api;
@@ -18,23 +20,21 @@ class Libgen extends _AbstactLibgen {
   Libgen({
     HttpClient client,
     MirrorOptions options = const MirrorOptions(),
-  })  : _api = LibgenApi(
-          client: client ?? HttpClient(baseUri: mirrorSchemas.first.baseUri),
-        ),
+  })  : _api = client ?? LibgenApi.fromSchema(mirrorSchemas.first),
         super(options: options);
 
   Libgen.fromSchema(MirrorSchema schema)
-      : _api = LibgenApi(client: HttpClient(baseUri: schema.baseUri)),
+      : _api = LibgenApi(baseUri: schema.baseUri),
         super(options: schema.options);
 
   static MirrorFinder get finder => MirrorFinder.fromSchemas(mirrorSchemas);
 
   /// Returns a [Libgen] instance
-  /// with [_client] being [MirrorSchema] with THE SHORTEST [ping] response
+  /// with [_api] being [MirrorSchema] with THE SHORTEST [ping] response
   static Future<Libgen> fastest() => finder.fastest();
 
   /// Returns a [Libgen] instance
-  /// with [_client] being [MirrorSchema] with ANY SUCCESSFUL [ping] response
+  /// with [_api] being [MirrorSchema] with ANY SUCCESSFUL [ping] response
   static Future<Libgen> any() => finder.any();
 
   /// Returns a [Book] by [id] or [Null] on no result
@@ -52,7 +52,7 @@ class Libgen extends _AbstactLibgen {
   @override
   Future<List<Book>> getByIds(List<int> ids) async {
     final list = <Book>[];
-    final results = await _api.json(ids);
+    final results = await _api.getByIds(ids);
     final byId = results.fold<Map<int, Book>>({}, (acc, item) {
       acc[int.parse(item['id'])] = Book.fromJson(item);
 
@@ -69,15 +69,16 @@ class Libgen extends _AbstactLibgen {
     return list;
   }
 
+  /// Search in [seachIn] by [query]
   @override
   Future<List<Book>> search({
-    @required String text,
+    @required String query,
     int count = 25,
     int offset = 0,
     SearchColumn searchIn,
   }) async {
     final libgenSearch = LibgenSearch(
-      text: text,
+      query: query,
       count: count,
       offset: offset,
       searchIn: enumValue(searchIn),
@@ -106,33 +107,4 @@ class Libgen extends _AbstactLibgen {
 
     return 'pong';
   }
-}
-
-@immutable
-abstract class _AbstactLibgen {
-  final MirrorOptions _options;
-
-  const _AbstactLibgen({
-    MirrorOptions options,
-  }) : _options = options;
-
-  /// Returns the internal [_options.canDownload].
-  bool get canDownload => _options.canDownload;
-
-  Future<Book> getById(int id);
-
-  Future<List<Book>> getByIds(List<int> id);
-
-  Future<List<Book>> search({
-    @required String text,
-    int count,
-    int offset,
-    SearchColumn searchIn,
-  });
-
-  Future<Book> getLatest();
-
-  Future<int> getLatestId();
-
-  Future<String> ping();
 }
