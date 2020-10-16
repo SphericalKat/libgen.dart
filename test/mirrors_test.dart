@@ -4,13 +4,14 @@ import 'package:libgen/src/mirrors.dart';
 import 'package:test/test.dart';
 
 import '__mocks__/book_mock.dart';
+import 'constants.dart';
 
 void main() {
   group('mirrors', () {
     for (final schema in mirrorSchemas) {
       _testSchema(schema);
     }
-  });
+  }, tags: HTTP);
 }
 
 void _testSchema(MirrorSchema schema) {
@@ -18,12 +19,11 @@ void _testSchema(MirrorSchema schema) {
     final mirror = Libgen.fromSchema(schema);
 
     test('returns "pong" on [ping]', () async {
-      expect(await mirror.ping(), equals('pong'));
+      expect(await mirror.ping(), 'pong');
     });
 
     test('returns the expected [Book]', () async {
-      expect(await mirror.getById(darkMatterBook.id),
-          equals(darkMatterBook.object));
+      expect(await mirror.getById(darkMatterBook.id), darkMatterBook.object);
     });
   });
 }

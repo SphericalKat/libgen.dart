@@ -3,6 +3,7 @@ import 'package:libgen/src/http_client.dart';
 import 'package:test/test.dart';
 
 import '__mocks__/client_mock.dart';
+import 'constants.dart';
 
 void main() {
   group('HttpClient', () {
@@ -13,7 +14,7 @@ void main() {
       final response = await client.get('');
 
       expect(response, isA<String>());
-    });
+    }, tags: HTTP);
 
     test('accepts a [client]', () async {
       final expected = 'something';

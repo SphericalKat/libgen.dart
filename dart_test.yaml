@@ -1,0 +1,8 @@
+tags:
+  http:
+    timeout: 2x
+    retry: 2
+
+presets:
+  http:
+    include_tags: http

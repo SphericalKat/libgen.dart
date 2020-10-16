@@ -10,6 +10,12 @@ analyze: ## Perform static analysis over lib/ test/
 test: ## Run tests
 	pub run test
 
+test.offline: ## Run tests without "http" tagged ones
+	pub run test -x http
+
+test.http: ## Run tests with "http" tag
+	pub run test -P http
+
 coverage: ## Run tests with coverage
 	pub run test --coverage=coverage
 	pub global activate coverage

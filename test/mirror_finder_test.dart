@@ -7,6 +7,7 @@ import 'package:test/test.dart';
 
 import '__mocks__/book_mock.dart';
 import '__mocks__/schema_mock.dart';
+import 'constants.dart';
 
 // ignore: must_be_immutable
 class MockLibgen extends Mock implements Libgen {}
@@ -26,11 +27,16 @@ void main() {
       when(brokenMirror.ping()).thenAnswer((_) async => throw Exception());
     };
 
-    test('.fromSchemas() returns a [MirrorFinder] instance', () {
-      expect(MirrorFinder.fromSchemas(mirrorSchemas) is MirrorFinder, isTrue);
-      expect(MirrorFinder.fromSchemas([workingSchemaSample]) is MirrorFinder,
-          isTrue);
-      expect(MirrorFinder.fromSchemas([]) is MirrorFinder, isTrue);
+    group('.fromSchemas()', () {
+      test('returns a [MirrorFinder] instance from mocked schemas', () {
+        expect(MirrorFinder.fromSchemas([workingSchemaSample]) is MirrorFinder,
+            isTrue);
+        expect(MirrorFinder.fromSchemas([]) is MirrorFinder, isTrue);
+      });
+
+      test('returns a [MirrorFinder] instance from real schemas', () {
+        expect(MirrorFinder.fromSchemas(mirrorSchemas) is MirrorFinder, isTrue);
+      }, tags: HTTP);
     });
 
     group('.fastest()', () {
@@ -38,7 +44,7 @@ void main() {
       setUp(_reset);
 
       test('returns the expected [Libgen] instance', () async {
-        expect(await finder.fastest(), equals(workingMirror));
+        expect(await finder.fastest(), workingMirror);
       });
 
       test('throws an [Exception] when all mirrros throw', () async {
@@ -58,11 +64,11 @@ void main() {
       setUp(_reset);
 
       test('returns the expected [Libgen] instance', () async {
-        expect(await finder.any(), equals(workingMirror));
+        expect(await finder.any(), workingMirror);
       });
 
       test('does not call the other mirror once it finds one', () async {
-        expect(await finder.any(), equals(workingMirror));
+        expect(await finder.any(), workingMirror);
 
         verifyZeroInteractions(brokenMirror);
       });

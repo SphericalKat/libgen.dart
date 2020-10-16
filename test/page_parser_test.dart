@@ -2,6 +2,7 @@ import 'package:libgen/src/page_parser.dart';
 import 'package:test/test.dart';
 
 import '__mocks__/pages_mock.dart';
+import 'constants.dart';
 
 void main() async {
   final html = await getSearchPage();
@@ -80,5 +81,5 @@ void main() async {
       expect(PageParser(response), PageParser(response));
       expect(PageParser(response), isNot(PageParser('response')));
     });
-  });
+  }, tags: HTTP);
 }
