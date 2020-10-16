@@ -5,7 +5,7 @@ Future<String> getSearchPage() => http
     .get('http://libgen.rs/search.php?req=something')
     .then((res) => res.body);
 
-String getHtmlPageWithIds(List<int> ids) => '''
+String htmlPageWithIds(List<int> ids) => '''
   <html>
     <body>
     <table class="c">
@@ -16,5 +16,4 @@ String getHtmlPageWithIds(List<int> ids) => '''
   </html>
   ''';
 
-PageParser getParsedHtmlPageWithIds(List<int> ids) =>
-    PageParser(getHtmlPageWithIds(ids));
+PageParser parsedPageWithIds(List<int> ids) => PageParser(htmlPageWithIds(ids));

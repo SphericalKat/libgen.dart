@@ -18,4 +18,5 @@ int minNonNullIndex(List list) {
 
 String beautify(Map json) => JsonEncoder.withIndent('  ').convert(json);
 
-String enumValue(Object value) => value.toString().split('').last;
+String enumValue(Object value) =>
+    value == null ? null : value.toString().split('.').last;

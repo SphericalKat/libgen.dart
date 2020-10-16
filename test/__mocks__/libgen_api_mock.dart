@@ -7,14 +7,14 @@ import 'book_mock.dart';
 class MockLibgenApi extends Mock implements LibgenApi {}
 
 MockLibgenApi mockedLibgenApi() {
-  final client = MockLibgenApi();
-  mockLibgenJsonRequest(client);
+  final api = MockLibgenApi();
+  mockLibgenJsonRequest(api);
 
-  return client;
+  return api;
 }
 
-void mockLibgenJsonRequest(MockLibgenApi client) {
-  when(client.getByIds(any)).thenAnswer((Invocation invocation) async =>
+void mockLibgenJsonRequest(MockLibgenApi api) {
+  when(api.getByIds(any)).thenAnswer((Invocation invocation) async =>
       invocation.positionalArguments.first
           .map<Map>((id) => booksById[id]?.json)
           .where((e) => e != null)

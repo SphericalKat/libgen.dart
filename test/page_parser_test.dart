@@ -42,7 +42,7 @@ void main() async {
     group('.ids', () {
       test('returns the expected list from HTML String', () {
         final ids = [1, 2, 3];
-        final parser = PageParser(getHtmlPageWithIds(ids));
+        final parser = PageParser(htmlPageWithIds(ids));
 
         expect(parser.ids, ids);
       });
@@ -56,13 +56,13 @@ void main() async {
 
     group('.firstId', () {
       test('returns the expected value', () {
-        final parser = PageParser(getHtmlPageWithIds([1]));
+        final parser = PageParser(htmlPageWithIds([1]));
 
         expect(parser.firstId, 1);
       });
 
       test('returns null when the ids List is empty', () {
-        final parser = PageParser(getHtmlPageWithIds([]));
+        final parser = PageParser(htmlPageWithIds([]));
 
         expect(parser.firstId, null);
       });
@@ -76,7 +76,7 @@ void main() async {
 
     test('== returns the expected result', () {
       final ids = [1, 2, 3];
-      final response = getHtmlPageWithIds(ids);
+      final response = htmlPageWithIds(ids);
 
       expect(PageParser(response), PageParser(response));
       expect(PageParser(response), isNot(PageParser('response')));

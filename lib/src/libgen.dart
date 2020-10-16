@@ -1,15 +1,13 @@
 import 'package:meta/meta.dart';
 
-import 'http_client.dart';
+import 'constants.dart';
 import 'libgen_api.dart';
 import 'list_extension.dart';
 import 'mirror_finder.dart';
 import 'mirror_schema.dart';
 import 'mirrors.dart';
 import 'models/book.dart';
-import 'models/search.dart';
 import 'search/libgen_search.dart';
-import 'util.dart';
 
 part 'libgen.abstract.dart';
 
@@ -18,15 +16,16 @@ class Libgen extends _AbstactLibgen {
   final LibgenApi _api;
 
   Libgen({
-    HttpClient client,
+    LibgenApi api,
     MirrorOptions options = const MirrorOptions(),
-  })  : _api = client ?? LibgenApi.fromSchema(mirrorSchemas.first),
+  })  : _api = api ?? LibgenApi.fromSchema(mirrorSchemas.first),
         super(options: options);
 
   Libgen.fromSchema(MirrorSchema schema)
       : _api = LibgenApi(baseUri: schema.baseUri),
         super(options: schema.options);
 
+  /// Returns a [MirrorFinder] instance with [mirrorSchemas]
   static MirrorFinder get finder => MirrorFinder.fromSchemas(mirrorSchemas);
 
   /// Returns a [Libgen] instance
@@ -75,13 +74,13 @@ class Libgen extends _AbstactLibgen {
     @required String query,
     int count = 25,
     int offset = 0,
-    SearchColumn searchIn,
+    SearchColumn searchIn = SearchColumn.def,
   }) async {
     final libgenSearch = LibgenSearch(
       query: query,
       count: count,
       offset: offset,
-      searchIn: enumValue(searchIn),
+      searchIn: searchIn,
     );
     final ids = await libgenSearch.run(_api.search);
 

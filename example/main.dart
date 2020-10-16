@@ -1,6 +1,5 @@
 import 'package:libgen/libgen.dart';
 import 'package:libgen/src/models/book.dart';
-import 'package:libgen/src/models/search.dart';
 import 'package:libgen/src/util.dart';
 
 Map<K, V> pick<K, V>(Map<K, V> json, List<K> keys) =>
