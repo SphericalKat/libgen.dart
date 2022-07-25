@@ -100,7 +100,7 @@ void main() {
     group('.getLatestId()', () {
       test('returns the expected first id from the list', () async {
         final api = MockLibgenApi();
-        when(api.search(any))
+        when(api.search({}))
             .thenAnswer((_) async => parsedPageWithIds([1, 2]));
 
         final mirror = Libgen(api: api);
@@ -113,7 +113,7 @@ void main() {
     group('.getLatest()', () {
       test('returns the expected first id from the list', () async {
         final api = mockedLibgenApi();
-        when(api.search(any)).thenAnswer((_) async => parsedPageWithIds([1]));
+        when(api.search({})).thenAnswer((_) async => parsedPageWithIds([1]));
 
         final mirror = Libgen(api: api);
         final result = await mirror.getLatest();
@@ -129,7 +129,7 @@ void main() {
         final expected = [darkMatterBook.object];
         final ids = expected.map((e) => e.id).toList();
         final api = mockedLibgenApi();
-        when(api.search(any)).thenAnswer((_) async => parsedPageWithIds(ids));
+        when(api.search({})).thenAnswer((_) async => parsedPageWithIds(ids));
 
         final mirror = Libgen(api: api);
         final result = await mirror.search(query: query);
@@ -146,7 +146,7 @@ void main() {
 
       test('returns an empty list when no items found', () async {
         final api = mockedLibgenApi();
-        when(api.search(any)).thenAnswer((_) async => PageParser('invalid'));
+        when(api.search({})).thenAnswer((_) async => PageParser('invalid'));
 
         final mirror = Libgen(api: api);
         final result = await mirror.search(query: 'something');

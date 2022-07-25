@@ -7,18 +7,18 @@ import '../util.dart';
 import 'compute_pagination.dart';
 import 'page_options.dart';
 
-typedef SearchRequest = Future<PageParser> Function(Map<String, String>);
+typedef SearchRequest = Future<PageParser> Function(Map<String, String?>);
 
 @immutable
 class LibgenSearch {
   final String query;
-  final int count;
-  final int offset;
-  final SearchColumn searchIn;
+  final int? count;
+  final int? offset;
+  final SearchColumn? searchIn;
   final List<PageOptions> _pages;
 
   LibgenSearch({
-    @required this.query,
+    required this.query,
     this.count = 25,
     this.offset = 0,
     this.searchIn = SearchColumn.def,
@@ -30,8 +30,8 @@ class LibgenSearch {
         'view': 'simple',
       };
 
-  Future<List<int>> run(SearchRequest search) async {
-    final idsAcc = <int>[];
+  Future<List<int?>> run(SearchRequest search) async {
+    final idsAcc = <int?>[];
 
     for (final page in _pages) {
       final query = {
@@ -39,7 +39,7 @@ class LibgenSearch {
         'res': page.limit,
       }..addAll(_defaultParams);
       final data = await search(query);
-      final ids = data.ids.drop(page.ignoreFirst, page.ignoreLast);
+      final List<int?> ids = data.ids.drop(page.ignoreFirst!, page.ignoreLast!);
 
       idsAcc.addAll(ids);
     }

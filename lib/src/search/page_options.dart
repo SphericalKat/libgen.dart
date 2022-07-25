@@ -6,17 +6,17 @@ class PageOptions {
   final String page;
 
   /// The number of items the client should ignore at the end of the [List]
-  final int ignoreLast;
+  final int? ignoreLast;
 
   /// The number of items the client should ignore at the start of the [List]
-  final int ignoreFirst;
+  final int? ignoreFirst;
 
   /// True if there are more pages to fetch
-  final bool hasNext;
+  final bool? hasNext;
 
   PageOptions({
-    int page,
-    int limit,
+    int? page,
+    int? limit,
     this.ignoreLast,
     this.ignoreFirst,
     this.hasNext,

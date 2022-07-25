@@ -1,5 +1,5 @@
 extension ListExtension<T> on List<T> {
-  T get firstOrNull => isEmpty ? null : first;
+  T? get firstOrNull => isEmpty ? null : first;
 
   /// removes [start] items from the start of the list
   /// and [end] items from the end of it

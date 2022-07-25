@@ -3,7 +3,7 @@ import 'pagination.dart';
 
 /// The point of this function is to calculate the optimal pages and their sizes
 /// Could be improved, but at the moment it's the best solution I can think of.
-List<PageOptions> computePagination(int total, {int offset = 0}) {
+List<PageOptions> computePagination(int? total, {int? offset = 0}) {
   final list = <PageOptions>[];
   final nav = Pagination(total, offset: offset);
 

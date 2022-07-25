@@ -24,7 +24,7 @@ void main() {
       when(workingMirror.ping())
           .thenAnswer((_) async => darkMatterBook.toString());
 
-      when(brokenMirror.ping()).thenAnswer((_) async => throw Exception());
+      when(brokenMirror.ping()).thenAnswer(((_) async => throw Exception()) as Future<String> Function(Invocation));
     };
 
     group('.fromSchemas()', () {
@@ -48,7 +48,7 @@ void main() {
       });
 
       test('throws an [Exception] when all mirrros throw', () async {
-        when(workingMirror.ping()).thenAnswer((_) async => throw Exception());
+        when(workingMirror.ping()).thenAnswer(((_) async => throw Exception()) as Future<String> Function(Invocation));
 
         try {
           await finder.fastest();
@@ -74,7 +74,7 @@ void main() {
       });
 
       test('throws an [Exception] when all mirrros throw', () async {
-        when(workingMirror.ping()).thenAnswer((_) async => throw Exception());
+        when(workingMirror.ping()).thenAnswer(((_) async => throw Exception()) as Future<String> Function(Invocation));
 
         try {
           await finder.any();

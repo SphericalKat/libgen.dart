@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-int minNonNullIndex(List list) {
+int? minNonNullIndex(List list) {
   if (list.length == 1) {
     return 0;
   }
@@ -16,7 +16,7 @@ int minNonNullIndex(List list) {
   return minIdx;
 }
 
-String beautify(Map json) => JsonEncoder.withIndent('  ').convert(json);
+String beautify(Map? json) => JsonEncoder.withIndent('  ').convert(json);
 
-String enumValue(Object value) =>
-    value == null ? null : value.toString().split('.').last;
+String enumValue(Object? value) =>
+    value?.toString().split('.').last ?? "null";

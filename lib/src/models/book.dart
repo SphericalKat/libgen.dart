@@ -5,21 +5,21 @@ import '../util.dart';
 @immutable
 class Book {
   final int id;
-  final String md5;
-  final String title;
-  final String author;
-  final String year;
-  final String edition;
-  final String publisher;
-  final String description;
-  final String identifier;
-  final String language;
-  final String filesize;
-  final String ext;
+  final String? md5;
+  final String? title;
+  final String? author;
+  final String? year;
+  final String? edition;
+  final String? publisher;
+  final String? description;
+  final String? identifier;
+  final String? language;
+  final String? filesize;
+  final String? ext;
 
   const Book({
-    @required this.id,
-    @required this.md5,
+    required this.id,
+    required String this.md5,
     this.title,
     this.author,
     this.year,
@@ -47,7 +47,7 @@ class Book {
         filesize = json['filesize'],
         ext = json['extension'];
 
-  Map<String, String> toJson() => {
+  Map<String, String?> toJson() => {
         'id': id.toString(),
         'md5': md5,
         'title': title,

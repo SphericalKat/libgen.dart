@@ -16,7 +16,7 @@ class Libgen extends _AbstactLibgen {
   final LibgenApi _api;
 
   Libgen({
-    LibgenApi api,
+    LibgenApi? api,
     MirrorOptions options = const MirrorOptions(),
   })  : _api = api ?? LibgenApi.fromSchema(mirrorSchemas.first),
         super(options: options);
@@ -38,7 +38,7 @@ class Libgen extends _AbstactLibgen {
 
   /// Returns a [Book] by [id] or [Null] on no result
   @override
-  Future<Book> getById(int id) async {
+  Future<Book?> getById(int? id) async {
     if (id == null) {
       return null;
     }
@@ -49,21 +49,21 @@ class Libgen extends _AbstactLibgen {
 
   /// Returns a [List] of [Book] by [ids]
   @override
-  Future<List<Book>> getByIds(List<int> ids) async {
+  Future<List<Book>> getByIds(List<int?> ids) async {
     final list = <Book>[];
     final results = await _api.getByIds(ids);
-    final byId = results.fold<Map<int, Book>>({}, (acc, item) {
+    final byId = results?.fold<Map<int, Book>>({}, (acc, item) {
       acc[int.parse(item['id'])] = Book.fromJson(item);
 
       return acc;
     });
 
-    ids.forEach((element) {
-      final item = byId[element];
+    for (var element in ids) {
+      final item = byId?[element!];
       if (item != null) {
         list.add(item);
       }
-    });
+    }
 
     return list;
   }
@@ -71,10 +71,10 @@ class Libgen extends _AbstactLibgen {
   /// Search in [seachIn] by [query]
   @override
   Future<List<Book>> search({
-    @required String query,
-    int count = 25,
-    int offset = 0,
-    SearchColumn searchIn = SearchColumn.def,
+    required String query,
+    int? count = 25,
+    int? offset = 0,
+    SearchColumn? searchIn = SearchColumn.def,
   }) async {
     final libgenSearch = LibgenSearch(
       query: query,
@@ -89,7 +89,7 @@ class Libgen extends _AbstactLibgen {
 
   /// Returns the latest [Book.id]
   @override
-  Future<int> getLatestId() async {
+  Future<int?> getLatestId() async {
     final data = await _api.search({'mode': 'last'});
 
     return data.firstId;
@@ -97,7 +97,7 @@ class Libgen extends _AbstactLibgen {
 
   /// Returns the latest [Book]
   @override
-  Future<Book> getLatest() => getLatestId().then(getById);
+  Future<Book?> getLatest() => getLatestId().then(getById);
 
   /// Returns `"pong"` if the request succeeds
   @override

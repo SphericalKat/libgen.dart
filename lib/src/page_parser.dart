@@ -9,9 +9,9 @@ class PageParser {
 
   PageParser(this.html) : _document = parse(html);
 
-  List<int> get ids => _rows.map<int>(_extractRowId).toList(growable: false);
+  List<int?> get ids => _rows.map<int?>(_extractRowId).toList(growable: false);
 
-  int get firstId => _extractRowId(_rows.firstOrNull);
+  int? get firstId => _extractRowId(_rows.firstOrNull);
 
   List<Element> get _rows {
     final list = _document.querySelectorAll('.c tr');
@@ -23,7 +23,7 @@ class PageParser {
     return list;
   }
 
-  int _extractRowId(el) {
+  int? _extractRowId(el) {
     final text = el?.querySelector('td')?.text;
 
     return text == null ? null : int.parse(text);

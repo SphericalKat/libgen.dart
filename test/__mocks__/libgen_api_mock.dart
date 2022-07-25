@@ -14,7 +14,7 @@ MockLibgenApi mockedLibgenApi() {
 }
 
 void mockLibgenJsonRequest(MockLibgenApi api) {
-  when(api.getByIds(any)).thenAnswer((Invocation invocation) async =>
+  when(api.getByIds([])).thenAnswer((Invocation invocation) async =>
       invocation.positionalArguments.first
           .map<Map>((id) => booksById[id]?.json)
           .where((e) => e != null)

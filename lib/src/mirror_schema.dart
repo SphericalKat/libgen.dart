@@ -6,7 +6,7 @@ class MirrorSchema {
   final MirrorOptions options;
 
   const MirrorSchema({
-    @required this.baseUri,
+    required this.baseUri,
     this.options = const MirrorOptions(),
   });
 }

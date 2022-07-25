@@ -8,25 +8,25 @@ import 'exceptions.dart';
 @immutable
 class HttpClient {
   final Client client;
-  final Uri baseUri;
+  final Uri? baseUri;
 
   HttpClient({
     this.baseUri,
-    Client client,
+    Client? client,
   }) : client = client ?? Client();
 
   /// Sends an HTTP GET request to [baseUri] with the
   /// required [path] and optional [query] and [headers]
   Future<String> get(
     String path, [
-    Map<String, String> query,
+    Map<String, String?>? query,
   ]) async {
-    final url = baseUri?.replace(path: path, queryParameters: query);
+    final Uri? url = baseUri?.replace(path: path, queryParameters: query);
 
-    return client.get(url).then(_reply);
+    return client.get(url!).then(((value) => _reply(value)!));
   }
 
-  String _reply(Response response) {
+  String? _reply(Response response) {
     if (response.statusCode != 200) {
       throw HttpException(response);
     }

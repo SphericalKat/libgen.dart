@@ -2,8 +2,8 @@ import 'package:libgen/libgen.dart';
 import 'package:libgen/src/models/book.dart';
 import 'package:libgen/src/util.dart';
 
-Map<K, V> pick<K, V>(Map<K, V> json, List<K> keys) =>
-    Map<K, V>.fromEntries(keys.map((key) => MapEntry(key, json[key])));
+Map<K, V?> pick<K, V>(Map<K, V> json, List<K> keys) =>
+    Map<K, V?>.fromEntries(keys.map((key) => MapEntry(key, json[key])));
 
 void printList(List<Book> list) => list.forEach((item) => print(beautify(pick(
       item.toJson(),

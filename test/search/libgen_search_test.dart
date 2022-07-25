@@ -14,7 +14,7 @@ void main() {
         final expected = [darkMatterBook.object];
         final ids = expected.map((e) => e.id).toList();
         final api = mockedLibgenApi();
-        when(api.search(any)).thenAnswer((_) async => parsedPageWithIds(ids));
+        when(api.search({})).thenAnswer((_) async => parsedPageWithIds(ids));
 
         final libgenSearch = LibgenSearch(query: query, count: 25);
         final result = await libgenSearch.run(api.search);
